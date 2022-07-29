@@ -20,7 +20,7 @@ export const PokemonSearchPage = () => {
     event.preventDefault();
 
     axios
-      .get(`${baseUrl}/pokemon/${formValues}`)
+      .get(`${baseUrl}/pokemon/${formValues.toLowerCase()}`)
       .then((response) => {
         setSearchResult(response.data);
         console.log(response.data);
