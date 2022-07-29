@@ -15,12 +15,16 @@ export const PokemonCard = (props: any) => {
   const { searchResult } = props.props;
   const [isActive, setIsActive] = useState(false);
 
+  useEffect(() => {
+    setIsActive(false);
+  }, [searchResult]);
+
   const handleClick = () => {
     setIsActive(true);
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }} style={{ marginBottom: 30 }}>
+    <Card sx={{ maxWidth: 400 }} style={{ marginBottom: 30 }}>
       <CardMedia
         component="img"
         alt="green iguana"

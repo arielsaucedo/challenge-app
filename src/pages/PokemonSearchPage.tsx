@@ -2,8 +2,10 @@ import { useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   Grid,
+  Modal,
   TextField,
   Typography,
 } from "@mui/material";
@@ -12,9 +14,25 @@ import { PokemonCard } from "./PokemonCard";
 
 const baseUrl = "https://pokeapi.co/api/v2/";
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "black",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
 export const PokemonSearchPage = () => {
-  const [formValues, setFormValues] = useState("");
+  const [formValues, setFormValues] = useState<string>("");
   const [searchResult, setSearchResult] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -23,10 +41,14 @@ export const PokemonSearchPage = () => {
       .get(`${baseUrl}/pokemon/${formValues.toLowerCase()}`)
       .then((response) => {
         setSearchResult(response.data);
-        console.log(response.data);
+        setLoading(true);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
+        setOpen(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -37,6 +59,10 @@ export const PokemonSearchPage = () => {
   const handleReset = () => {
     setSearchResult(null);
     setFormValues("");
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -85,6 +111,22 @@ export const PokemonSearchPage = () => {
         </form>
       </Box>
 
+      <Modal
+        hideBackdrop
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+        <Box sx={{ ...style, width: 200 }} style={{ textAlign: "center" }}>
+          <h2 id="child-modal-title">Error</h2>
+          <p id="child-modal-description">
+            No se encuentra el pokemon solicitado. Intente nuevamente.
+          </p>
+          <Button onClick={handleClose}>Cerrar</Button>
+        </Box>
+      </Modal>
+
       {searchResult === null ? (
         <Box
           style={{
@@ -105,7 +147,13 @@ export const PokemonSearchPage = () => {
             marginTop: "20px",
           }}
         >
-          <PokemonCard props={{ searchResult }} />
+          {loading ? (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <PokemonCard props={{ searchResult }} />
+          )}
         </Box>
       )}
     </>
