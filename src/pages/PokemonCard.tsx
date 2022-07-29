@@ -13,7 +13,7 @@ import {
 
 export const PokemonCard = (props: any) => {
   const { searchResult } = props.props;
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
     setIsActive(false);
