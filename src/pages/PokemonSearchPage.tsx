@@ -55,6 +55,22 @@ export const PokemonSearchPage = () => {
           </Box>
         </form>
       </Box>
+
+      {searchResult.length === 0 ? (
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Typography variant="h5">
+            Realiza la busqueda de tu pokemon favorito
+          </Typography>
+        </Box>
+      ) : (
+        <div>Tarjeta de datos</div>
+      )}
     </>
   );
 };
