@@ -7,18 +7,36 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
+import { PokemonCard } from "./PokemonCard";
+
+const baseUrl = "https://pokeapi.co/api/v2/";
 
 export const PokemonSearchPage = () => {
   const [formValues, setFormValues] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState(null);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log("Funciona esta mierda?");
+
+    axios
+      .get(`${baseUrl}/pokemon/${formValues}`)
+      .then((response) => {
+        setSearchResult(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleInputChange = (e: any) => {
     setFormValues(e.target.value);
+  };
+
+  const handleReset = () => {
+    setSearchResult(null);
+    setFormValues("");
   };
 
   return (
@@ -52,11 +70,22 @@ export const PokemonSearchPage = () => {
             <Button variant="contained" color="primary" type="submit">
               Buscar
             </Button>
+            <Button
+              variant="outlined"
+              style={{
+                color: "white",
+                borderColor: "white",
+                marginLeft: "10px",
+              }}
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
           </Box>
         </form>
       </Box>
 
-      {searchResult.length === 0 ? (
+      {searchResult === null ? (
         <Box
           style={{
             display: "flex",
@@ -69,7 +98,15 @@ export const PokemonSearchPage = () => {
           </Typography>
         </Box>
       ) : (
-        <div>Tarjeta de datos</div>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <PokemonCard props={{ searchResult }} />
+        </Box>
       )}
     </>
   );
