@@ -36,9 +36,12 @@ export const PokemonSearchPage = () => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    getPokemons(formValues);
+  };
 
+  const getPokemons = (pokemon: string) => {
     axios
-      .get(`${baseUrl}/pokemon/${formValues.toLowerCase()}`)
+      .get(`${baseUrl}/pokemon/${pokemon.toLowerCase()}`)
       .then((response) => {
         setSearchResult(response.data);
         setLoading(true);
