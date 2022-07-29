@@ -9,10 +9,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { PokemonCard } from "./PokemonCard";
-
-const baseUrl = "https://pokeapi.co/api/v2/";
+import { getPokemons } from "../services/getPokemons";
 
 const style = {
   position: "absolute" as "absolute",
@@ -36,12 +34,8 @@ export const PokemonSearchPage = () => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    getPokemons(formValues);
-  };
 
-  const getPokemons = (pokemon: string) => {
-    axios
-      .get(`${baseUrl}/pokemon/${pokemon.toLowerCase()}`)
+    getPokemons(formValues)
       .then((response) => {
         setSearchResult(response.data);
         setLoading(true);
